@@ -1,0 +1,59 @@
+group 'com.djj'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+
+repositories {
+    jcenter()
+    //mavenCentral()
+}
+
+/*dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+
+}*/
+
+dependencies {
+    // The production code uses Guava
+    compile 'com.google.guava:guava:20.0'
+
+    // struts library
+    compile group: 'org.apache.struts', name: 'struts2-core', version: '2.3.24.1'
+    compile 'org.apache.struts:struts2-spring-plugin:2.3.24.1'
+    compile 'org.apache.struts:struts2-json-plugin:2.3.24.1'
+
+    // spring library
+    compile group: 'org.springframework', name: 'spring-core', version: '4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-web', version: '4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-orm', version: '4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-aop', version: '4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-aspects', version: '4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.3.6.RELEASE'
+    compile 'javax.servlet:javax.servlet-api:3.1.0'
+
+    // hibernate library
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.7.Final'
+    compile 'org.hibernate.common:hibernate-commons-annotations:5.0.1.Final'
+    compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+    compile 'com.mysql.jdbc:com.springsource.com.mysql.jdbc:5.1.6'
+
+    //compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    //compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.6'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.6'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+
+    // common library
+    compile 'org.apache.commons:com.springsource.org.apache.commons.logging:1.1.1'
+    compile 'org.slf4j:slf4j-api:1.7.13'
+    testCompile 'junit:junit:4.12'
+}

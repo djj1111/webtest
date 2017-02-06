@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="fileDao" class="com.djj.test.dao.FileDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <bean id="fileServiceBase" class="com.djj.test.service.FileServiceImpl">
+        <property name="fileDao" ref="fileDao"></property>
+    </bean>
+
+    <!-- 此处为代理 -->
+    <bean name="fileService" parent="transactionProxy">
+        <property name="target" ref="fileServiceBase"></property>
+    </bean>
+</beans>
