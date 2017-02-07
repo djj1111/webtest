@@ -44,13 +44,16 @@ dependencies {
     compile 'org.hibernate.common:hibernate-commons-annotations:5.0.1.Final'
     compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
     compile 'com.mysql.jdbc:com.springsource.com.mysql.jdbc:5.1.6'
+    compile 'com.alibaba:druid:1.0.28'
 
     //compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
     //compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
 
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.6'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.6'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+    //缺省用jackson,可改用fastjson，见spring-mvc <mvc:annotation-driven>
+    //compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.6'
+    //compile 'com.fasterxml.jackson.core:jackson-core:2.8.6'
+    //compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+    compile 'com.alibaba:fastjson:1.2.24'
 
     // common library
     compile 'org.apache.commons:com.springsource.org.apache.commons.logging:1.1.1'
