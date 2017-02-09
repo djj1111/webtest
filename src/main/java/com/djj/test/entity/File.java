@@ -1,5 +1,8 @@
 package com.djj.test.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +15,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name="file")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class File {
     //设置主键
     @Id
