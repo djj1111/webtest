@@ -20,6 +20,7 @@ public class FileDaoImpl implements FileDao {
     public File getFile(int id) {
         String hql = "from File f where f.id=?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        //query.setCacheable(true);
         query.setInteger(0, id);
 
         return (File) query.uniqueResult();
@@ -29,7 +30,12 @@ public class FileDaoImpl implements FileDao {
     public List<File> getAllFile() {
         String hql = "from File";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        query.setCacheable(true);
+        //设置查询缓存
+        //query.setCacheable(true);
+        //如果要自己指定查询缓存的name属性，一般使用query.YourCacheName 。也就是一般会使用query.开头。
+        //如果不指定，默认的name是：org.hibernate.cache.StandardQueryCache，或者是org.hibernate.cache.UpdateTimestampsCache。
+        //需要在ehcache.xml中定义
+        //query.setCacheRegion("query.YourCacheName");
         return query.list();
     }
 

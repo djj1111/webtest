@@ -12,8 +12,19 @@
         <property name="fileDao" ref="fileDao"></property>
     </bean>
 
+    <bean id="blobFileDao" class="com.djj.test.dao.BlobFileDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <bean id="blobfileServiceBase" class="com.djj.test.service.BlobFileServiceImpl">
+        <property name="blobFileDao" ref="blobFileDao"></property>
+    </bean>
+
     <!-- 此处为代理 -->
     <bean name="fileService" parent="transactionProxy">
         <property name="target" ref="fileServiceBase"></property>
+    </bean>
+    <bean name="blobFileService" parent="transactionProxy">
+        <property name="target" ref="blobfileServiceBase"></property>
     </bean>
 </beans>

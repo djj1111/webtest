@@ -76,18 +76,24 @@
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.format_sql">true</prop>
                 <!--增加cache配置-->
-                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.cache.use_query_cache">false</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.region.factory_class">
                     org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
                 </prop>
+                <!--在hibernate.cfg.xml中配置ehcache.xml的位置,例如：-->
+                <!--<property name="cache.provider_configuration_file_resource_path">config/hibernate/ehcache/ehcache.xml</property>-->
+                <!--<prop key="cache.provider_configuration_file_resource_path">classpath*:ehcache.xml</prop>-->
+
             </props>
         </property>
         <property name="annotatedClasses">
             <list>
                 <value>com.djj.test.entity.File</value>
+                <value>com.djj.test.entity.BlobFile</value>
             </list>
         </property>
+
     </bean>
 
     <!-- 配置一个事务管理器 -->
@@ -107,5 +113,12 @@
                 <prop key="*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
+    </bean>
+
+    <!--配置上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1000000000"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="uploadTempDir" value="fileupload/temp"/>
     </bean>
 </beans>
