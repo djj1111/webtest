@@ -1,8 +1,8 @@
 package com.djj.test.dao;
 
 import com.djj.test.entity.File;
-import org.hibernate.query.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class FileDaoImpl implements FileDao {
     public List<File> getAllFile() {
         String hql = "from File";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-
+        query.setCacheable(true);
         return query.list();
     }
 

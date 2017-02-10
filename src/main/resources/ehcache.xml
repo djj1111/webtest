@@ -43,4 +43,15 @@
 
            timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LFU"/>
 
+    <!--如果你使用了Hibernate的查询缓存，需要在ehcache.xml中加入下面的配置-->
+    <cache name="org.hibernate.cache.UpdateTimestampsCache"
+           maxElementsInMemory="5000"
+           eternal="true"
+           overflowToDisk="true"/>
+    <cache name="org.hibernate.cache.StandardQueryCache"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToLiveSeconds="120"
+           overflowToDisk="true"/>
+
 </ehcache>

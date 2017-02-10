@@ -28,6 +28,11 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath*:/spring-mvc.xml</param-value>
         </init-param>
+        <!--http session超时，单位秒-->
+        <init-param>
+            <param-name>timeout</param-name>
+            <param-value>300</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

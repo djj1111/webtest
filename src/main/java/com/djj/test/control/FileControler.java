@@ -31,6 +31,15 @@ public class FileControler {
     }
 
     @ResponseBody
+    @RequestMapping("/getfile/{id}")
+    public File getFilebyId(@PathVariable int id) {
+
+        // request.setAttribute("userList", userManager.getAllUser());
+
+        return fileService.getFile(id);
+    }
+
+    @ResponseBody
     @RequestMapping("/savefile/{path}")
     public List<File> saveFile(@PathVariable String path) {
         File file = new File();
