@@ -32,7 +32,7 @@
 
     -->
 
-    <defaultCache maxElementsInMemory="1000" eternal="false"
+    <defaultCache maxElementsInMemory="10000" eternal="false"
 
                   timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="false"/>
 
@@ -53,5 +53,13 @@
            eternal="false"
            timeToLiveSeconds="120"
            overflowToDisk="false"/>
+    <!--可以给每个实体类指定一个配置文件，通过name属性指定，要使用类的全名-->
+    <cache name="com.djj.test.entity.File"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="600"
+           overflowToDisk="false"
+    />
 
 </ehcache>

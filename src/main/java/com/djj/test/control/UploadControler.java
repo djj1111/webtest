@@ -4,13 +4,13 @@ import com.djj.test.entity.BlobFile;
 import com.djj.test.service.BlobFileService;
 import com.djj.test.upload.Result;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 
@@ -26,6 +26,17 @@ public class UploadControler {
      private Result result;*/
     @Resource(name = "blobFileService")
     private BlobFileService blobFileService;
+
+    //@ResponseBody
+    @RequestMapping(value = {"/download{fileID}"}, method = RequestMethod.GET)
+    public String downloadFile(@PathVariable int fileID, HttpServletResponse response) throws IOException {
+        BlobFile file = blobFileService.getBlobFile(fileID);
+        response.setContentType(file.getType());
+        response.setContentLength(file.getPhoto().length);
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getText() + "\"");
+        FileCopyUtils.copy(file.getPhoto(), response.getOutputStream());
+        return "success";
+    }
 
 
     @RequestMapping("/uploadfiletodatabase")
@@ -80,10 +91,11 @@ public class UploadControler {
      */
 
     private String uploadFile(MultipartFile file, HttpServletRequest request, int position) {
-        if (position == 1) {
-            String path = request.getSession().getServletContext().getRealPath("upload");
+        String path = request.getSession().getServletContext().getRealPath("upload");
 
-            String fileName = file.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
+        if (position == 1) {
+
 
             File targetFile = new File(path, fileName);
 
@@ -107,8 +119,11 @@ public class UploadControler {
             BlobFile f = new BlobFile();
             try {
                 f.setPhoto(file.getBytes());
+                f.setText(fileName);
+                f.setType(file.getContentType());
+                f.setIp(request.getRemoteAddr());
                 blobFileService.addBlobFile(f);
-                return "success";
+                return fileName;
             } catch (IOException e) {
                 e.printStackTrace();
                 return "io error";
@@ -118,6 +133,13 @@ public class UploadControler {
         }
 
 
+    }
+
+    private String getRemortIP(HttpServletRequest request) {
+        if (request.getHeader("x-forwarded-for") == null) {
+            return request.getRemoteAddr();
+        }
+        return request.getHeader("x-forwarded-for");
     }
 
 }

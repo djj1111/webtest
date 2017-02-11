@@ -31,12 +31,12 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean delFile(int id) {
-        return fileDao.delFile(id);
+    public void delFile(File file) {
+        fileDao.delFile(file);
     }
 
     @Override
-    public boolean updateFile(File file) {
-        return fileDao.updateFile(file);
+    public void updateFile(File file) {
+        fileDao.updateFile(file);
     }
 }

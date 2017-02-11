@@ -39,13 +39,15 @@ public class FileControler {
         return fileService.getFile(id);
     }
 
-    @ResponseBody
+    //@ResponseBody
     @RequestMapping("/savefile/{path}")
-    public List<File> saveFile(@PathVariable String path) {
+    public String saveFile(@PathVariable String path) {
         File file = new File();
         file.setMid(9);
         file.setPath(path);
         fileService.addFile(file);
-        return fileService.getAllFile();
+        return "success";
+        //return fileService.getAllFile();
     }
+
 }

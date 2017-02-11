@@ -1,7 +1,6 @@
 package com.djj.test.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 /**
  * Created by djj on 2017/2/10.
@@ -33,8 +32,12 @@ public class BlobFile {
     这是需要用到@Basic注释。@Basic注释的定义：FetchType属性指定是否延时加载，默认为立即加载，optional属性指定在生成数据库结构时字段能否为null。*/
     @Column
     private String ip;
+    @Column(columnDefinition = "timestamp")
+
+    //当表中有Blob,Clob字段时，timestamp字段被当作text
+    private String time;
     @Column
-    private Timestamp time;
+    private String type;
 
     public int getId() {
         return id;
@@ -65,15 +68,23 @@ public class BlobFile {
     }
 
     public void setIp(String ip) {
-        this.text = ip;
+        this.ip = ip;
     }
 
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

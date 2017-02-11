@@ -14,7 +14,7 @@ public interface FileService {
 
     public void addFile(File file);
 
-    public boolean delFile(int id);
+    public void delFile(File file);
 
-    public boolean updateFile(File file);
+    public void updateFile(File file);
 }

@@ -25,7 +25,7 @@ public class File {
     private int mid;
     @Column
     private String path;
-    @Column
+    @Column(columnDefinition = "timestamp")
     private Timestamp updatetime;
 
 

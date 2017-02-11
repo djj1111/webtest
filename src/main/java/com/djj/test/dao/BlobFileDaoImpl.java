@@ -2,7 +2,6 @@ package com.djj.test.dao;
 
 import com.djj.test.entity.BlobFile;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 
 /**
  * Created by djj on 2017/2/10.
@@ -16,12 +15,13 @@ public class BlobFileDaoImpl implements BlobFileDao {
 
     @Override
     public BlobFile getBlobFile(int id) {
-        String hql = "from BlobFile f where f.id=?";
+        /*String hql = "from BlobFile f where f.id=?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         //query.setCacheable(true);
         String s = "";
         query.setParameter(0, id);
-        return (BlobFile) query.uniqueResult();
+        return (BlobFile) query.uniqueResult();*/
+        return sessionFactory.getCurrentSession().load(BlobFile.class, id);
     }
 
     @Override
