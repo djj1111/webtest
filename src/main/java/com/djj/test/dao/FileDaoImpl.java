@@ -1,15 +1,20 @@
 package com.djj.test.dao;
 
 import com.djj.test.entity.File;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * Created by djj on 2017/2/5.
  */
+
+@Component
 public class FileDaoImpl implements FileDao {
+    @Resource
     private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
@@ -26,20 +31,21 @@ public class FileDaoImpl implements FileDao {
 
         //return (File) query.uniqueResult();
 
-        try {
+       /* try {
             return sessionFactory.getCurrentSession().load(File.class, id);
         } catch (Exception e) {
             e.printStackTrace();
             sessionFactory.getCurrentSession().getTransaction().rollback();
             return null;
-        }
+        }*/
+        return (File) sessionFactory.getCurrentSession().load(File.class, id);
 
     }
 
     @Override
     public List<File> getAllFile() {
         String hql = "from File";
-        try {
+        //try {
             Query query = sessionFactory.getCurrentSession().createQuery(hql);
             //设置查询缓存
             query.setCacheable(true);
@@ -48,11 +54,11 @@ public class FileDaoImpl implements FileDao {
             //需要在ehcache.xml中定义
             //query.setCacheRegion("query.YourCacheName");
             return query.list();
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             e.printStackTrace();
             sessionFactory.getCurrentSession().getTransaction().rollback();
             return null;
-        }
+        }*/
 
     }
 

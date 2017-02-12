@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by djj on 2017/2/10.
@@ -27,15 +30,41 @@ public class UploadControler {
     @Resource(name = "blobFileService")
     private BlobFileService blobFileService;
 
+    @ResponseBody
+    @RequestMapping("/downloadfilename{id}")
+    public String getfilename(@PathVariable int id) throws IOException {
+        return blobFileService.getFileName(id);
+
+        //return simpleDateFormat.format(t);
+    }
+
     //@ResponseBody
     @RequestMapping(value = {"/download{fileID}"}, method = RequestMethod.GET)
     public String downloadFile(@PathVariable int fileID, HttpServletResponse response) throws IOException {
         BlobFile file = blobFileService.getBlobFile(fileID);
         response.setContentType(file.getType());
         response.setContentLength(file.getPhoto().length);
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getText() + "\"");
+        //response头中的字符要转码成UTF-8，java.net.URLEncode.encode.
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + java.net.URLEncoder.encode(file.getText(), "UTF-8") + "\"");
         FileCopyUtils.copy(file.getPhoto(), response.getOutputStream());
         return "success";
+    }
+
+    @ResponseBody
+    @RequestMapping("/downloadtest{id}")
+    public String showtime(@PathVariable int id) throws IOException {
+        BlobFile file = blobFileService.getBlobFile(id);
+        /*SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ssSSS");
+        try{
+            return simpleDateFormat.parse(file.getTime().);
+        }catch (ParseException e){
+            e.printStackTrace();
+            return null;
+        }*/
+        Timestamp t = Timestamp.valueOf(file.getTime());
+        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        return simpleDateFormat.format(t);
     }
 
 
@@ -121,7 +150,7 @@ public class UploadControler {
                 f.setPhoto(file.getBytes());
                 f.setText(fileName);
                 f.setType(file.getContentType());
-                f.setIp(request.getRemoteAddr());
+                f.setIp(getIpAddr(request));
                 blobFileService.addBlobFile(f);
                 return fileName;
             } catch (IOException e) {
@@ -135,11 +164,19 @@ public class UploadControler {
 
     }
 
-    private String getRemortIP(HttpServletRequest request) {
-        if (request.getHeader("x-forwarded-for") == null) {
-            return request.getRemoteAddr();
+    //防止用户用代理
+    public String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
         }
-        return request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
 }

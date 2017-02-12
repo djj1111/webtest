@@ -2,13 +2,17 @@ package com.djj.test.service;
 
 import com.djj.test.dao.FileDao;
 import com.djj.test.entity.File;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * Created by djj on 2017/2/5.
  */
+@Component("fileServiceBase")
 public class FileServiceImpl implements FileService {
+    @Resource
     private FileDao fileDao;
 
     public void setFileDao(FileDao fileDao) {

@@ -83,9 +83,11 @@
     </filter-mapping>
 
     <!-- 配置Session -->
+    <!-- 过滤器需要配置在Struts2框架过滤器前面，否则不起作用。 -->
+    <!--AOP编程思想，添加过滤器，在视图层进行数据取完毕后进行关闭session，这样就可以解决了NoSession异常-->
     <filter>
         <filter-name>openSession</filter-name>
-        <filter-class>org.springframework.orm.hibernate5.support.OpenSessionInViewFilter</filter-class>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>openSession</filter-name>

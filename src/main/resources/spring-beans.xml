@@ -4,21 +4,23 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="fileDao" class="com.djj.test.dao.FileDaoImpl">
+    <!--已改注解模式@@Component("name")、@Resource-->
+
+    <!--<bean id="fileDao" class="com.djj.test.dao.FileDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>
+    </bean>-->
 
-    <bean id="fileServiceBase" class="com.djj.test.service.FileServiceImpl">
-        <property name="fileDao" ref="fileDao"></property>
-    </bean>
+    <!-- <bean id="fileServiceBase" class="com.djj.test.service.FileServiceImpl">
+         <property name="fileDao" ref="fileDao"></property>
+     </bean>-->
 
-    <bean id="blobFileDao" class="com.djj.test.dao.BlobFileDaoImpl">
+    <!--<bean id="blobFileDao" class="com.djj.test.dao.BlobFileDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
 
     <bean id="blobfileServiceBase" class="com.djj.test.service.BlobFileServiceImpl">
         <property name="blobFileDao" ref="blobFileDao"></property>
-    </bean>
+    </bean>-->
 
     <!-- 此处为代理 -->
     <bean name="fileService" parent="transactionProxy">

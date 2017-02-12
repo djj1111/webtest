@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by djj on 2017/2/4.
@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name="file")
+//开启二级缓存，改动数据后，清除缓存
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class File {
     //设置主键
@@ -25,8 +26,9 @@ public class File {
     private int mid;
     @Column
     private String path;
-    @Column(columnDefinition = "timestamp")
-    private Timestamp updatetime;
+
+    @Column//(columnDefinition = "timestamp")
+    private Date updatetime;
 
 
     //配置uuid，本来jpa是不支持uuid的，但借用hibernate的方法可以实现。
@@ -52,11 +54,11 @@ public class File {
         this.path=path;
     }
 
-    public Timestamp getUpdatetime() {
+    public Date getUpdatetime() {
         return updatetime;
     }
 
-    public void setUpdatetime(Timestamp updatetime) {
+    public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
 
