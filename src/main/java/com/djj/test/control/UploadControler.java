@@ -73,7 +73,14 @@ public class UploadControler {
     @ResponseBody      //把回传类转换成json
 
     public Result uploadFileToDatabase(@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request) throws IllegalStateException, IOException {
+
         Result result = new Result();
+        if (file == null) {
+            result.setCode("500");
+            result.setPath("");
+            result.setMessage("error");
+            return result;
+        }
         String path = uploadFile(file, request, 0);
 
         if (path.equals("io erros")) {
