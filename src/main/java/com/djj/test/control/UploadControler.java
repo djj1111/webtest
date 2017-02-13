@@ -87,8 +87,8 @@ public class UploadControler {
         boolean isFileUpload = ServletFileUpload.isMultipartContent(request);//检测是否存在文件上传的请求
         List<Result> result = new ArrayList();
         if (isFileUpload) {
-            // 处理磁盘文件工厂类
-            FileItemFactory factory = new DiskFileItemFactory();
+            // 处理磁盘文件工厂类,param:低于sizethreshold走内存，高于存在repository位置
+            FileItemFactory factory = new DiskFileItemFactory(10 * 1024 * 1024, null);
             // 文件上传的处理类
             ServletFileUpload upload = new ServletFileUpload(factory);
             //-1 无限
