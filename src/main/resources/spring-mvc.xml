@@ -2,6 +2,7 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -10,8 +11,11 @@
     http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
 
+    <!--当使用<context:component-scan/>后，即可将<context:annotation-config/>省去。-->
     <!-- 注解扫描包 -->
     <context:component-scan base-package="com.djj.test"></context:component-scan>
+    <!--aop扫描注入-->
+    <aop:aspectj-autoproxy/>
 
     <!-- 开启注解 -->
     <!--缺省用-->
