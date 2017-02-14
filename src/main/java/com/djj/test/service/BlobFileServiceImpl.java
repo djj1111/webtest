@@ -15,22 +15,18 @@ public class BlobFileServiceImpl implements BlobFileService {
     @Resource
     private BlobFileDao blobFileDao;
 
-    public void setBlobFileDao(BlobFileDao blobFileDao) {
-        this.blobFileDao = blobFileDao;
-    }
-
     @Override
     public BlobFile getBlobFile(int id) {
-        return blobFileDao.getBlobFile(id);
+        return blobFileDao.getByKey(id);
     }
 
-    @Override
+    /*@Override
     public String getFileName(int id) {
         return blobFileDao.getFileName(id);
-    }
+    }*/
 
     @Override
-    public void addBlobFile(BlobFile blobFile) {
-        blobFileDao.addBlobFile(blobFile);
+    public int addBlobFile(BlobFile blobFile) {
+        return (Integer) blobFileDao.save(blobFile);
     }
 }

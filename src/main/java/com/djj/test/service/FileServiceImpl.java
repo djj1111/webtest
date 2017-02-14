@@ -19,11 +19,10 @@ public class FileServiceImpl implements FileService {
         this.fileDao = fileDao;
     }*/
 
-   /* @Override
-    public File getFile(int id) {
-        return fileDao.getFile(id);
+    @Override
+    public File getFileByID(int id) {
+        return fileDao.getByKey(id);
     }
-*/
 
     @Override
     public List<File> getAllFiles() {
@@ -31,8 +30,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void addFile(File file) {
-        fileDao.;
+    public int addFile(File file) {
+        return (Integer) fileDao.save(file);
     }
 
     /*@Override

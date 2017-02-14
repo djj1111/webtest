@@ -44,7 +44,7 @@ public class UploadControler {
     @ResponseBody
     @RequestMapping("/downloadfilename{id}")
     public String getfilename(@PathVariable int id) throws IOException {
-        return blobFileService.getFileName(id);
+        return blobFileService.getBlobFile(id).getText();
 
         //return simpleDateFormat.format(t);
     }

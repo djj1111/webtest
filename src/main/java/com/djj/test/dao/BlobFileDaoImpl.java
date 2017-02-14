@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class BlobFileDaoImpl extends AbstractDao<Integer, BlobFile> implements BlobFileDao {
+public class BlobFileDaoImpl extends AbstractDaoImpl<Integer, BlobFile> implements BlobFileDao {
 
     /* @Resource
     private SessionFactory sessionFactory;

@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 @Component
-public class FileDaoImpl extends AbstractDao<Integer, File> implements FileDao {
+public class FileDaoImpl extends AbstractDaoImpl<Integer, File> implements FileDao {
     /*@Resource
     private SessionFactory sessionFactory;
 

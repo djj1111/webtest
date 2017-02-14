@@ -1,5 +1,9 @@
 package com.djj.test.dao;
 
+import org.hibernate.Criteria;
+
+import java.io.Serializable;
+
 /**
  * Created by djj on 2017/2/14.
  */
@@ -12,8 +16,20 @@ package com.djj.test.dao;
  */
 
 
-public abstract interface AbstractDao {
-    public getByKey()
+public abstract interface AbstractDao<PK extends Serializable, T> {
+    public T getByKey(PK key);
+
+    public void delByKey(PK key);
+
+    public void persist(T entity);
+
+    public Serializable save(T entity);
+
+    public void update(T entity);
+
+    public void delete(T entity);
+
+    public Criteria createEntityCriteria();
 }
 
 

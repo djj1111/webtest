@@ -38,10 +38,19 @@ public class FileControler {
 
         // request.setAttribute("userList", userManager.getAllUser());
 
-        return fileService.getFile(id);
+        return fileService.getFileByID(id);
     }
 
-    //@ResponseBody
+    @ResponseBody
+    @RequestMapping("/getfilepath-{id}")
+    public String getFilePathbyId(@PathVariable int id) {
+
+        // request.setAttribute("userList", userManager.getAllUser());
+
+        return fileService.getFileByID(id).getPath();
+    }
+
+    @ResponseBody
     @RequestMapping(value = {"/addfile"}, method = RequestMethod.POST)
     public String saveFile(HttpServletRequest request) {
         Enumeration<String> a = request.getParameterNames();
@@ -56,18 +65,18 @@ public class FileControler {
                     f.setMid(Integer.valueOf(request.getParameter(parm)));
                     break;
                 case "path":
-                    f.setMid(Integer.valueOf(request.getParameter(parm)));
+                    f.setPath(request.getParameter(parm));
                     break;
                 default:
                     break;
             }
         }
-        fileService.addFile(f);
-        return "success";
+
+        return String.valueOf(fileService.addFile(f));
         //return fileService.getAllFile();
     }
 
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping("/updatefileby{id}")
     public String updateFileById(@PathVariable int id) {
 
@@ -75,6 +84,6 @@ public class FileControler {
 
         fileService.updateFileById(id);
         return "success";
-    }
+    }*/
 
 }

@@ -3,7 +3,6 @@ package com.djj.test.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -12,8 +11,8 @@ import java.lang.reflect.ParameterizedType;
 /**
  * Created by djj on 2017/2/14.
  */
-@Component
-public class AbstractDaoImpl<PK extends Serializable, T> {
+//@Component
+public class AbstractDaoImpl<PK extends Serializable, T> implements AbstractDao<PK, T> {
 
     private final Class<T> persistentClass;
     @Resource
@@ -44,6 +43,24 @@ public class AbstractDaoImpl<PK extends Serializable, T> {
     }
 
     public Serializable save(T entity) {
+        /*try{
+            Field f = entity.getClass().getDeclaredField("id");
+            f.setAccessible(true);
+            PK val =(PK)f.get(entity);
+
+        }catch (NoSuchFieldException e){
+            e.printStackTrace();
+            System.out.println("Prim Key must named id");
+            return false;
+        }catch (IllegalAccessException e){
+            e.printStackTrace();
+            System.out.println("id are not accessible.");
+            return false;
+        }
+
+        //设置些属性是可以访问的
+
+        PK .get()*/
         return getSession().save(entity);
     }
 
@@ -55,7 +72,7 @@ public class AbstractDaoImpl<PK extends Serializable, T> {
         getSession().delete(entity);
     }
 
-    protected Criteria createEntityCriteria() {
+    public Criteria createEntityCriteria() {
         return getSession().createCriteria(persistentClass);
     }
 }

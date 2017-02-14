@@ -1,5 +1,7 @@
 package com.djj.test.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.bytecode.internal.javassist.FieldHandled;
 import org.hibernate.bytecode.internal.javassist.FieldHandler;
 
@@ -11,8 +13,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tmp")
-//有Blob不适合用二级缓存
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//有Blob不适合用二级缓存?
+//理解有误，延迟加载不进入二级缓存，但不影响其它字段的二级缓存。二级缓存适合经常读取又不太写入的数据
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BlobFile implements FieldHandled {
     //设置主键
     //配置uuid，本来jpa是不支持uuid的，但借用hibernate的方法可以实现。

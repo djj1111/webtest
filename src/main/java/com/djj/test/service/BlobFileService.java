@@ -8,6 +8,6 @@ import com.djj.test.entity.BlobFile;
 public interface BlobFileService {
     public BlobFile getBlobFile(int id);
 
-    public String getFileName(int id);
-    public void addBlobFile(BlobFile blobFile);
+    //public String getFileName(int id);
+    public int addBlobFile(BlobFile blobFile);
 }
