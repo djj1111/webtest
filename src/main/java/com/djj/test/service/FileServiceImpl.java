@@ -15,32 +15,39 @@ public class FileServiceImpl implements FileService {
     @Resource
     private FileDao fileDao;
 
-    public void setFileDao(FileDao fileDao) {
+    /*public void setFileDao(FileDao fileDao) {
         this.fileDao = fileDao;
-    }
+    }*/
 
-    @Override
+   /* @Override
     public File getFile(int id) {
         return fileDao.getFile(id);
     }
+*/
 
     @Override
-    public List<File> getAllFile() {
-        return fileDao.getAllFile();
+    public List<File> getAllFiles() {
+        return fileDao.getAll();
     }
 
     @Override
     public void addFile(File file) {
-        fileDao.addFile(file);
+        fileDao.;
     }
 
-    @Override
+    /*@Override
     public void delFile(File file) {
         fileDao.delFile(file);
     }
-
-    @Override
+*/
+   /* @Override
     public void updateFile(File file) {
         fileDao.updateFile(file);
     }
+
+    @Override
+    public void updateFileById(int id) {
+        File f=fileDao.getFile(id);
+        f.setMid(147);
+    }*/
 }

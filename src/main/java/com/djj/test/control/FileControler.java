@@ -5,10 +5,12 @@ import com.djj.test.service.FileService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -27,11 +29,11 @@ public class FileControler {
 
         // request.setAttribute("userList", userManager.getAllUser());
 
-        return fileService.getAllFile();
+        return fileService.getAllFiles();
     }
 
     @ResponseBody
-    @RequestMapping("/getfile/{id}")
+    @RequestMapping("/getfilebyid-{id}")
     public File getFilebyId(@PathVariable int id) {
 
         // request.setAttribute("userList", userManager.getAllUser());
@@ -40,14 +42,39 @@ public class FileControler {
     }
 
     //@ResponseBody
-    @RequestMapping("/savefile/{path}")
-    public String saveFile(@PathVariable String path) {
-        File file = new File();
-        file.setMid(9);
-        file.setPath(path);
-        fileService.addFile(file);
+    @RequestMapping(value = {"/addfile"}, method = RequestMethod.POST)
+    public String saveFile(HttpServletRequest request) {
+        Enumeration<String> a = request.getParameterNames();
+        String parm = null;
+        String val = "";
+        File f = new File();
+        while (a.hasMoreElements()) {
+            //参数名
+            parm = a.nextElement();
+            switch (parm) {
+                case "mid":
+                    f.setMid(Integer.valueOf(request.getParameter(parm)));
+                    break;
+                case "path":
+                    f.setMid(Integer.valueOf(request.getParameter(parm)));
+                    break;
+                default:
+                    break;
+            }
+        }
+        fileService.addFile(f);
         return "success";
         //return fileService.getAllFile();
+    }
+
+    @ResponseBody
+    @RequestMapping("/updatefileby{id}")
+    public String updateFileById(@PathVariable int id) {
+
+        // request.setAttribute("userList", userManager.getAllUser());
+
+        fileService.updateFileById(id);
+        return "success";
     }
 
 }

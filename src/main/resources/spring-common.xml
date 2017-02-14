@@ -107,6 +107,7 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="add*">PROPAGATION_REQUIRED,-Exception</prop>
+                <prop key="save*">PROPAGATION_REQUIRED,-Exception</prop>
                 <prop key="update*">PROPAGATION_REQUIRED,-Exception</prop>
                 <prop key="del*">PROPAGATION_REQUIRED,-Exception</prop>
                 <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
