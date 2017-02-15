@@ -4,10 +4,11 @@ import com.djj.test.entity.BlobFile;
 import com.djj.test.service.BlobFileService;
 import com.djj.test.upload.Result;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileCleaningTracker;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -17,10 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -88,7 +86,11 @@ public class UploadControler {
         List<Result> result = new ArrayList();
         if (isFileUpload) {
             // 处理磁盘文件工厂类,param:低于sizethreshold走内存，高于存在repository位置
-            FileItemFactory factory = new DiskFileItemFactory(10 * 1024 * 1024, null);
+            //设置上传临时文件回收器
+            FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(request.getServletContext());
+            DiskFileItemFactory factory = new DiskFileItemFactory(10 * 1024 * 1024, null);
+
+            factory.setFileCleaningTracker(fileCleaningTracker);
             // 文件上传的处理类
             ServletFileUpload upload = new ServletFileUpload(factory);
             //-1 无限
@@ -99,8 +101,6 @@ public class UploadControler {
             //解析上传的文件
             try {
                 List<FileItem> fileItems = upload.parseRequest(request);
-                if (fileItems == null || fileItems.isEmpty()) System.out.println("emtpy");
-
                 for (Iterator iterator = fileItems.iterator(); iterator
                         .hasNext(); ) {
                     FileItem fileItem = (FileItem) iterator.next();
@@ -110,8 +110,6 @@ public class UploadControler {
                         //对非文件上传的处理
                         if ("userName".equals(fileItem.getFieldName())) {
                         }
-                        System.out.println("afadfa");
-
                     } else {
                         String contentType = fileItem.getContentType()
                                 .toLowerCase();// 比如：image/pjpg
@@ -120,15 +118,17 @@ public class UploadControler {
                                 || contentType.indexOf("jpeg") != -1
                                 || contentType.indexOf("png") != -1
                                 || contentType.indexOf("gif") != -1 || contentType.indexOf("bmp") !=-1)*/ (true) {
-
                             //对文件上传的处理
-                            String fileUploadPath = fileItem.getName();
+                            String filename = fileItem.getName();
+                            if (filename.equals("")) continue;
                             // 上传之后文件的名字要唯一：采用当前上传的系统时间的毫秒数作为文件的名字
-                            String time = System.currentTimeMillis() + "";// 当前系统时间
-                            String postfix = fileUploadPath.substring(fileUploadPath.lastIndexOf("."));//获取文件的后缀名
-                            String fileName = time + postfix;
+                            filename = System.currentTimeMillis() + "-" + filename;// 当前系统时间
+                            //String postfix = fileUploadPath.substring(fileUploadPath.lastIndexOf("."));//获取文件的后缀名
+                            //String fileName = time + postfix;
                             String contextPath = request.getServletContext().getRealPath("fileupload/temp");//获取工程中的名为imageTemp的目录
-                            String filePath = contextPath + File.separator + fileName;
+                            File dir = new File(contextPath);
+                            dir.mkdirs();
+                            String filePath = contextPath + File.separator + filename;
                             File file = new File(filePath);//代表上传文件的目录
                             FileOutputStream out = new FileOutputStream(file);
                             InputStream in = fileItem.getInputStream();
@@ -148,16 +148,18 @@ public class UploadControler {
                 }
             } catch (FileUploadException e) {
                 System.out.println("文件上传异常");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             } finally {
-                if (result == null || result.isEmpty()) {
+                if (result.isEmpty()) {
                     Result result1 = new Result();
                     result1.setCode("500");
                     result1.setPath("");
                     result1.setMessage("上传故障，内容为空");
                     result.add(result1);
                 }
-                return result;
             }
+            return result;
         } else {
             Result result1 = new Result();
             result1.setCode("500");
