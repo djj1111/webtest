@@ -12,7 +12,10 @@ import org.apache.commons.io.FileCleaningTracker;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -77,11 +80,11 @@ public class UploadControler {
     }
 
 
-    @RequestMapping("/uploadfiletodatabase")
+    @RequestMapping("/uploadfiletopath")
 
     @ResponseBody      //把回传类转换成json
 
-    public List<Result> uploadFileToDatabase(HttpServletRequest request) throws IllegalStateException, IOException {
+    public List<Result> uploadFileToPath(HttpServletRequest request) throws IllegalStateException, IOException {
         boolean isFileUpload = ServletFileUpload.isMultipartContent(request);//检测是否存在文件上传的请求
         List<Result> result = new ArrayList();
         if (isFileUpload) {
@@ -190,13 +193,129 @@ public class UploadControler {
         return result;*/
     }
 
-    @RequestMapping("/uploadfiletopath")
+    @RequestMapping("/uploadfiletodatabase")
 
     @ResponseBody      //把回传类转换成json
 
-    public Result uploadFileToPath(@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request) throws IllegalStateException, IOException {
+    public List<Result> uploadFileToDatabase(HttpServletRequest request) throws IllegalStateException, IOException {
+        boolean isFileUpload = ServletFileUpload.isMultipartContent(request);//检测是否存在文件上传的请求
+        List<Result> result = new ArrayList();
+        if (isFileUpload) {
+            // 处理磁盘文件工厂类,param:低于sizethreshold走内存，高于存在repository位置
+            //设置上传临时文件回收器
+            FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(request.getServletContext());
+            DiskFileItemFactory factory = new DiskFileItemFactory(10 * 1024 * 1024, null);
+
+            factory.setFileCleaningTracker(fileCleaningTracker);
+            // 文件上传的处理类
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            //-1 无限
+            //upload.setFileSizeMax(1000000000L);
+            //request maxsize
+            //upload.setSizeMax();
+
+            //解析上传的文件
+            try {
+                List<FileItem> fileItems = upload.parseRequest(request);
+                for (Iterator iterator = fileItems.iterator(); iterator
+                        .hasNext(); ) {
+                    FileItem fileItem = (FileItem) iterator.next();
+                    //判断上传的表单域是否为文件上传,false 表示文件上传<input type="file" />
+                    //true 表示为非文件上传
+                    if (fileItem.isFormField()) {
+                        //对非文件上传的处理
+                        if ("userName".equals(fileItem.getFieldName())) {
+                        }
+                    } else {
+                        String contentType = fileItem.getContentType()
+                                .toLowerCase();// 比如：image/pjpg
+                        //进行格式的判断
+                        if /*(contentType.indexOf("jpg") != -1
+                                || contentType.indexOf("jpeg") != -1
+                                || contentType.indexOf("png") != -1
+                                || contentType.indexOf("gif") != -1 || contentType.indexOf("bmp") !=-1)*/ (true) {
+                            //对文件上传的处理
+                            String filename = fileItem.getName();
+                            if (filename.equals("")) continue;
+                            // 上传之后文件的名字要唯一：采用当前上传的系统时间的毫秒数作为文件的名字
+                          /*  filename = System.currentTimeMillis() + "-" + filename;// 当前系统时间
+                            //String postfix = fileUploadPath.substring(fileUploadPath.lastIndexOf("."));//获取文件的后缀名
+                            //String fileName = time + postfix;
+                            String contextPath = request.getServletContext().getRealPath("fileupload/temp");//获取工程中的名为imageTemp的目录
+                            File dir = new File(contextPath);
+                            dir.mkdirs();
+                            String filePath = contextPath + File.separator + filename;
+                            File file = new File(filePath);//代表上传文件的目录
+                            FileOutputStream out = new FileOutputStream(file);*/
+                            InputStream in = fileItem.getInputStream();
+                            byte[] photo = new byte[(int) fileItem.getSize()];
+                            in.read(photo);
+                            in.close();
+                            BlobFile f = new BlobFile();
+                            f.setPhoto(photo);
+                            f.setText(filename);
+                            f.setType(fileItem.getContentType());
+                            f.setIp(getIpAddr(request));
+                            blobFileService.addBlobFile(f);
+
+                            Result result1 = new Result();
+                            result1.setCode("200");
+                            result1.setPath(filename);
+                            result1.setMessage("上传成功");
+                            result.add(result1);
+                        } else {
+                            System.out.println("文件格式错误");
+                        }
+                    }
+
+                }
+            } catch (FileUploadException e) {
+                System.out.println("文件上传异常");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                if (result.isEmpty()) {
+                    Result result1 = new Result();
+                    result1.setCode("500");
+                    result1.setPath("");
+                    result1.setMessage("上传故障，内容为空");
+                    result.add(result1);
+                }
+            }
+            return result;
+        } else {
+            Result result1 = new Result();
+            result1.setCode("500");
+            result1.setPath("");
+            result1.setMessage("非上传文件请求");
+            result.add(result1);
+            return result;
+        }
+
+        /*Result result = new Result();
+        if (file == null) {
+            result.setCode("500");
+            result.setPath("");
+            result.setMessage("error");
+            return result;
+        }
+        String path = uploadFile(file, request, 0);
+
+        if (path.equals("io erros")) {
+            result.setCode("400");
+            result.setPath("");
+            result.setMessage("上传不成功");
+        } else {
+            result.setCode("200");
+            result.setPath(path);
+            result.setMessage("上传成功");
+        }
+        return result;*/
+    }
+
+    /*public Result uploadFileToPath(@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request) throws IllegalStateException, IOException {
         Result result = new Result();
-        String path = uploadFile(file, request, 1);
+        String path = uploadFile(file, request, 0);
 
         if (path.equals("io erros")) {
             result.setCode("400");
@@ -210,7 +329,7 @@ public class UploadControler {
 
         return result;
 
-    }
+    }*/
 
     /**
      * 上传

@@ -32,47 +32,51 @@
         <!-- 数据库连接基础信息 -->
         <property name="url" value="${jdbc_url}"/>
         <property name="username" value="${jdbc_username}"/>
-        <property name="password" value="${jdbc_password}"/>
-        <property name="connection.autoReconnect" value="true"/>
-        <property name="connection.autoReconnectForPools" value="true"/>
-        <property name="connection.is-connection-validation-required" value="true"/>
+        <property name="password" value="${password}"/>
         <!-- 初始化连接大小 -->
         <property name="initialSize" value="10"/>
         <!-- 连接池最大使用连接数量 -->
         <property name="maxActive" value="150"/>
         <!-- 连接池最小空闲 -->
-        <property name="minIdle" value="0"/>
+        <property name="minIdle" value="1"/>
         <!-- 获取连接最大等待时间 -->
-        <property name="maxWait" value="60000"/>
+        <property name="maxWait" value="10000"/>
 
         <!-- 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。 -->
         <property name="poolPreparedStatements" value="true"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="33"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
 
         <!-- 验证数据库连接有效性，要求查询语句 -->
         <property name="validationQuery" value="${validationQuery}"/>
         <!-- 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。 -->
         <property name="testWhileIdle" value="true"/>
         <!-- 申请连接时执行validationQuery检测连接是否有效，配置true会降低性能。 -->
-        <property name="testOnBorrow" value="false"/>
+        <property name="testOnBorrow" value="true"/>
         <!-- 归还连接时执行validationQuery检测连接是否有效，配置true会降低性能 -->
         <property name="testOnReturn" value="false"/>
 
         <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
         <property name="timeBetweenEvictionRunsMillis" value="60000"/>
         <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-        <property name="minEvictableIdleTimeMillis" value="25200000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <!-- 当数据库抛出一些不可恢复的异常时，抛弃连接,null为自动识别-->
+        <!--设为null,必须这样写-->
+        <property name="exceptionSorter">
+            <null/>
+        </property>
 
-        <!-- 对于长时间不使用的连接强制关闭 -->
-        <property name="removeAbandoned" value="true"/>
-        <!-- 关闭超过30分钟的空闲连接，1800秒，也就是30分钟 -->
-        <property name="removeAbandonedTimeout" value="1800"/>
-        <!-- 关闭abanded连接时输出错误日志 -->
-        <property name="logAbandoned" value="true"/>
+        <!-- &lt;!&ndash; 对于长时间不使用的连接强制关闭 &ndash;&gt;
+         <property name="removeAbandoned" value="true"/>
+         &lt;!&ndash; 关闭超过30分钟的空闲连接，1800秒，也就是30分钟 &ndash;&gt;
+         <property name="removeAbandonedTimeout" value="1800"/>
+         &lt;!&ndash; 关闭abanded连接时输出错误日志 &ndash;&gt;
+         <property name="logAbandoned" value="true"/>-->
 
         <!-- 监控数据库 -->
         <!-- <property name="filters" value="mergeStat" /> -->
-        <property name="filters" value="stat"/>
+        <property name="filters" value="config,stat"/>
+        <!--加密密码-->
+        <property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${publickey}"/>
     </bean>
 
     <!-- 配置SessionFactory -->
