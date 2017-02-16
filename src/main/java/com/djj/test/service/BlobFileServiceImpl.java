@@ -10,7 +10,8 @@ import javax.annotation.Resource;
  * Created by djj on 2017/2/10.
  */
 
-@Component("blobfileServiceBase")
+//@Component("blobfileServiceBase")
+@Component("blobFileService")
 public class BlobFileServiceImpl implements BlobFileService {
     @Resource
     private BlobFileDao blobFileDao;

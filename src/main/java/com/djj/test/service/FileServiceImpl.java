@@ -10,7 +10,8 @@ import java.util.List;
 /**
  * Created by djj on 2017/2/5.
  */
-@Component("fileServiceBase")
+//@Component("fileServiceBase")
+@Component("fileService")
 public class FileServiceImpl implements FileService {
     @Resource
     private FileDao fileDao;

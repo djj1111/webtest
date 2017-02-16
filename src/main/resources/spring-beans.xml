@@ -22,11 +22,12 @@
         <property name="blobFileDao" ref="blobFileDao"></property>
     </bean>-->
 
+    <!--第二种配置事务的方式 ，代理-->
     <!-- 此处为代理 -->
-    <bean name="fileService" parent="transactionProxy">
+    <!--<bean name="fileService" parent="transactionProxy">
         <property name="target" ref="fileServiceBase"></property>
     </bean>
     <bean name="blobFileService" parent="transactionProxy">
         <property name="target" ref="blobfileServiceBase"></property>
-    </bean>
+    </bean>-->
 </beans>

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- 引入项目配置文件 -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -26,7 +33,9 @@
         <property name="url" value="${jdbc_url}"/>
         <property name="username" value="${jdbc_username}"/>
         <property name="password" value="${jdbc_password}"/>
-
+        <property name="connection.autoReconnect" value="true"/>
+        <property name="connection.autoReconnectForPools" value="true"/>
+        <property name="connection.is-connection-validation-required" value="true"/>
         <!-- 初始化连接大小 -->
         <property name="initialSize" value="10"/>
         <!-- 连接池最大使用连接数量 -->
@@ -101,8 +110,8 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <!-- 配置事务，使用代理的方式 -->
-    <bean id="transactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+    <!-- 配置事务，使用代理的方式，适配第二种方式 -->
+    <!--<bean id="transactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
         <property name="transactionManager" ref="transactionManager"/>
         <property name="transactionAttributes">
             <props>
@@ -114,10 +123,31 @@
                 <prop key="*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
-    </bean>
+    </bean>-->
+
+    <!-- 第一种配置事务的方式 ，tx-->
+    <tx:advice id="txadvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" isolation="REPEATABLE_READ"
+                       timeout="5"/>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" isolation="REPEATABLE_READ"
+                       timeout="5"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" isolation="REPEATABLE_READ"
+                       timeout="5"/>
+            <tx:method name="del*" propagation="REQUIRED" rollback-for="Exception" isolation="REPEATABLE_READ"
+                       timeout="5"/>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" isolation="REPEATABLE_READ" timeout="5"/>
+            <tx:method name="*" propagation="REQUIRED" read-only="true" isolation="REPEATABLE_READ" timeout="5"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="serviceMethod" expression="execution(* com.djj.test.service.*Impl.*(..))"/>
+        <aop:advisor pointcut-ref="serviceMethod" advice-ref="txadvice"/>
+    </aop:config>
 
     <!--配置上传-->
-    <!--使用DiskFileItemFactory、ServletFileUpload不用以下配置-->
+    <!--使用DiskFileItemFactory、ServletFileUpload不用以下配置，以下只能单文件上传-->
     <!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
          &lt;!&ndash;上传文件最大值&ndash;&gt;
          <property name="maxUploadSize" value="1000000000"/>
