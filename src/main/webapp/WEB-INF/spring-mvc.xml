@@ -10,16 +10,27 @@
     http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
 
+
     <!--当使用<context:component-scan/>后，即可将<context:annotation-config/>省去。-->
     <!-- 注解扫描包 -->
-    <context:component-scan base-package="com.djj.test"></context:component-scan>
+    <context:component-scan base-package="com.djj.test.control">
+        <!--以下配置只扫描@Controller注解-->
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--include-filter只扫描符合要求的，其它就舍弃了，所以要把最终的包写上，而不能这样写base-package=”comdjj.test”。
+    这种写法对于include-filter来讲它都会扫描，造成其它包的非@Controller注解全部失效。
+    哈哈哈，这点需要注意。他一般会导致一个常见的错误，那就是事务不起作用，
+    补救的方法是添加use-default-filters=”false”,或单独配置aop扫描注入-->
     <!--aop扫描注入-->
+    <!--proxy-target-class属性若此值为true强制使用CGLIB代理,普通代理必须通过接口，CGLIB可无接口，但不能是final类-->
     <!--<aop:aspectj-autoproxy/>-->
 
     <!-- 开启注解 -->
     <!--缺省用-->
     <!--<mvc:annotation-driven/>-->
     <mvc:annotation-driven>
+        <!--返回object自动转换成jsonstring,如果使用com.fasterxml.jackson,这段不要-->
         <mvc:message-converters register-defaults="true">
             <bean id="fastJsonHttpMessageConverter"
                   class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">

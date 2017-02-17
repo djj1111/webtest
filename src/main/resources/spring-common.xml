@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:component-scan base-package="com.djj.test">
+        <!--以下配置排除@Controller注解-->
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--<aop:aspectj-autoproxy/>-->
 
     <!-- 引入项目配置文件 -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -130,6 +140,7 @@
     </bean>-->
 
     <!-- 第一种配置事务的方式 ，tx-->
+    <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
     <tx:advice id="txadvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" isolation="REPEATABLE_READ"
@@ -144,6 +155,7 @@
             <tx:method name="*" propagation="REQUIRED" read-only="true" isolation="REPEATABLE_READ" timeout="5"/>
         </tx:attributes>
     </tx:advice>
+
 
     <aop:config>
         <aop:pointcut id="serviceMethod" expression="execution(* com.djj.test.service.*Impl.*(..))"/>
