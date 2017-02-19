@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="_csrf" content="${_csrf.token}"/>
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("p").click(function () {
-                $(this).hide();
+                var t = $("meta[name='_csrf']").attr("content");
+                alert(t);
+                $(this).html("asdf" + t);
             });
         });
     </script>
