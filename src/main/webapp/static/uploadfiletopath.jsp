@@ -13,9 +13,7 @@
 </head>
 <body>
 <form name="myform" method="post" enctype="multipart/form-data" action="/uploadfiletopath">
-    <input type="file" name="files">
-    <input type="file" name="files">
-    <input type="file" name="files">
+    <input type="file" name="files" multiple>
     <security:csrfInput/>
     <input type="submit">
 </form>

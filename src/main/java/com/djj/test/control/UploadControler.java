@@ -97,10 +97,12 @@ public class UploadControler {
             if (!file.isEmpty()) {
                 try {
                     // 文件保存路径
-                    String filePath = request.getSession().getServletContext().getRealPath("/") + "fileupload/temp/"
-                            + file.getOriginalFilename();
+                    String filePath = request.getSession().getServletContext().getRealPath("/") + "fileupload/temp/";
+
                     // 转存文件
-                    file.transferTo(new File(filePath));
+                    File f = new File(filePath);
+                    f.mkdirs();
+                    file.transferTo(new File(f, file.getOriginalFilename()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
