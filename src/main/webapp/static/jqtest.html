@@ -1,21 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("p").click(function () {
-                var t = $("meta[name='_csrf']").attr("content");
-                alert(t);
-                $(this).html("asdf" + t);
+    <!--<meta name="_csrf" content="${_csrf.token}"/>-->
+
+
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/jquery.ui.widget.js"></script>
+    <script src="js/jquery.iframe-transport.js"></script>
+    <script src="js/jquery.fileupload.js"></script>
+    <script>
+        /*$(document).ready(function () {
+         $("#uploadfiles").fileupload({
+         url: "/uploadfiletopath",
+         sequentialUploads: true
+         }
+         );
+         }
+
+         );*/
+        $(function () {
+            $('#uploadfiles').fileupload({
+                /*
+                 url: "/uploadfiletopath",*/
+                dataType: 'json',
+                //autoUpload: true,
+                sequentialUploads: true,
+                add: function (e, data) {
+                    data.context = $('<button/>').text('Upload')
+                        .appendTo(document.body)
+                        .click(function () {
+                            $(this).replaceWith($('<p/>').text('Uploading...'));
+                            data.submit();
+                        });
+                },
+                done: function (e, data) {
+                    //data.context.text('Upload finished.');
+                    alert(data.code)
+                }
             });
         });
     </script>
 </head>
 
 <body>
-<p>If you click on me, I will disappear.</p>
+<input type="file" id="uploadfiles" name="files" data-url="/uploadfiletopath" multiple>
 </body>
 
 </html>

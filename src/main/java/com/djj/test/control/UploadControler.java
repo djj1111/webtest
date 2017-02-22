@@ -83,9 +83,16 @@ public class UploadControler {
 
     @ResponseBody      //把回传类转换成json
 
-    public /*List<Result>*/ String uploadFileToPath(/*HttpServletRequest request*/@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
+    public Result uploadFileToPath(/*HttpServletRequest request*/@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
         // 判断文件是否为空
-        if (files == null || files.isEmpty()) return "empty";
+        Result result1 = new Result();
+
+        if (files == null || files.isEmpty()) {
+            result1.setCode("500");
+            result1.setPath("");
+            result1.setMessage("上传故障，内容为空");
+            return result1;
+        }
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
                 try {
@@ -101,7 +108,11 @@ public class UploadControler {
         }
 
         // 重定向
-        return "ture";
+        result1.setCode("200");
+        result1.setPath("");
+        result1.setMessage("success");
+        return result1;
+
         /*boolean isFileUpload = ServletFileUpload.isMultipartContent(request);//检测是否存在文件上传的请求
         List<Result> result = new ArrayList();
         if (isFileUpload) {

@@ -9,8 +9,9 @@
 
     <!--<http pattern="/static/**" security="none" />-->
     <http auto-config="true" use-expressions="false">
-        <intercept-url pattern="/**" access="ROLE_ADMIN"/>
+        <!--<csrf disabled="true"/>-->
         <intercept-url pattern="/uploadfiletodatabase" access="ROLE_USER"/>
+        <intercept-url pattern="/**" access="ROLE_ADMIN"/>
     </http>
 
     <authentication-manager>
