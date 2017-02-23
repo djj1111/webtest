@@ -41,10 +41,10 @@
                  },}*/
                 done: function (e, data) {
                     //data.context.text('Upload finished.');
-                    $("p").html("");//清空info内容
+                    $("#pp").html("");//清空info内容
                     $.each(data.comments, function (i, item) {
-                        $("p").append(
-                            "<div>" + item.code + "</div><hr/>");
+                        $("#pp").append(
+                            "<div>" + item.toString() + "</div><hr/>");
                     });
                 }
 
@@ -57,6 +57,6 @@
 
 <body>
 <input type="file" id="file" name="files" data-url="/uploadfiletopath" multiple>
-<p></p>
+<p id="pp">hello</p>
 </body>
 </html>

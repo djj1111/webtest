@@ -15,6 +15,10 @@
 <form name="myform" method="post" enctype="multipart/form-data" action="/uploadfiletopath">
     <input type="file" name="files" multiple>
     <security:csrfInput/>
+    <%--相当于插入
+    <input type="hidden"
+           name="${_csrf.parameterName}"
+           value="${_csrf.token}"/>--%>
     <input type="submit">
 </form>
 </body>
