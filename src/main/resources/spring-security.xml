@@ -7,13 +7,15 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
-    <!--<http pattern="/static/**" security="none" />-->
+    <!--<http pattern="/static/login*" security="none" />-->
     <http auto-config="true" use-expressions="false">
         <!--<csrf disabled="true"/>-->
 
         <intercept-url pattern="/uploadfiletopath" access="ROLE_USER"/>
         <intercept-url pattern="/static/**" access="ROLE_ADMIN,ROLE_USER"/>
         <!--<intercept-url pattern="/**" access="ROLE_ADMIN"/>-->
+        <form-login login-page="/login.jsp" authentication-failure-forward-url="/login.jsp"
+                    default-target-url="/index.jsp"/>
     </http>
 
     <authentication-manager>

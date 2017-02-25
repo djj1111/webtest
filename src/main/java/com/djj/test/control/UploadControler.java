@@ -10,6 +10,7 @@ import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileCleaningTracker;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,8 +84,9 @@ public class UploadControler {
 
     @ResponseBody      //把回传类转换成json
 
-    public Result uploadFileToPath(/*HttpServletRequest request*/@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
+    public Result uploadFileToPath(/*HttpServletRequest request*/@RequestParam("files") List<MultipartFile> files, HttpServletRequest request, Model model) throws IOException {
         // 判断文件是否为空
+
         Result result1 = new Result();
 
         if (files == null || files.isEmpty()) {

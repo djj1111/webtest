@@ -39,6 +39,19 @@
                  data.submit();
                  });
                  },}*/
+                start: function (e) {
+                    $("#pp").html("上传中……");
+                },
+                progressall: function (e, data) {
+                    // $("#pp").html("");
+                    var per = parseInt(data.loaded / data.total * 100, 10);
+                    // $("#pp").html("上传中……"+per+"%");
+                    $('.bar').css(
+                        'width',
+                        per + '%'
+                    );
+
+                },
                 done: function (e, data) {
                     //data.context.text('Upload finished.');
                     $("#pp").html("");//清空info内容
@@ -59,5 +72,8 @@
 <body>
 <input type="file" id="file" name="files" data-url="/uploadfiletopath" multiple>
 <p id="pp">hello</p>
+<div id="progress">
+    <div class="bar" style="width: 10%;height: 18px;background: green"></div>
+</div>
 </body>
 </html>
