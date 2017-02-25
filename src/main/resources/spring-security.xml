@@ -10,6 +10,7 @@
     <!--<http pattern="/static/**" security="none" />-->
     <http auto-config="true" use-expressions="false">
         <!--<csrf disabled="true"/>-->
+
         <intercept-url pattern="/uploadfiletopath" access="ROLE_USER"/>
         <intercept-url pattern="/static/**" access="ROLE_ADMIN,ROLE_USER"/>
         <!--<intercept-url pattern="/**" access="ROLE_ADMIN"/>-->

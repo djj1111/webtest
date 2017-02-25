@@ -11,17 +11,24 @@ import javax.persistence.*;
  * Created by djj on 2017/2/10.
  */
 
+//@Entity 声明当前是一个持久化类
 @Entity
+
+//@Table 设置当前持久化类所映射的数据库表，如果当前类中没有使用@Table注解，Hibernate会自动使用默认的持久化类的类名(不带包名)作为所映射的表名
 @Table(name = "tmp")
+
 //有Blob不适合用二级缓存?
 //理解有误，延迟加载不进入二级缓存，但不影响其它字段的二级缓存。二级缓存适合经常读取又不太写入的数据
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BlobFile implements FieldHandled {
+    //transient 不系列化
+    //普通字段开启lazy需要用FieldHandler，关联字段不需要。
+    private transient FieldHandler fieldHandler;
     //设置主键
     //配置uuid，本来jpa是不支持uuid的，但借用hibernate的方法可以实现。
     //@GeneratedValue(generator = "uuid")
     //@GenericGenerator(name = "uuid", strategy = "uuid")
-    private transient FieldHandler fieldHandler;
+
     @Id
     @Column
     private int id;

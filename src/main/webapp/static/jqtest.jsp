@@ -42,11 +42,12 @@
                 done: function (e, data) {
                     //data.context.text('Upload finished.');
                     $("#pp").html("");//清空info内容
-                    $.each(data.comments, function (i, item) {
+                    $.each(data.result, function (i, item) {
                         $("#pp").append(
-                            "<div>" + item.toString() + "</div><hr/>");
+                            "<div>" + item + "</div><hr/>");
                     });
                 }
+
 
             });
         });
